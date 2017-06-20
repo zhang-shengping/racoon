@@ -1,0 +1,6 @@
+[run]
+branch = True
+source = racoon
+
+[report]
+ignore_errors = True
