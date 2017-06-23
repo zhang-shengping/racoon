@@ -9,3 +9,8 @@ class SampleEndpoint(object):
         print messages
         print
 
+    # this used to test
+    def info(self, messages):
+        print messages
+        print
+

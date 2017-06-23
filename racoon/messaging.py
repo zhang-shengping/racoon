@@ -29,6 +29,7 @@ def get_transport(url=None, cache=True):
 def get_event_listener(transport, targets, endpoints,
                        allow_requeue=False,
                        batch_size=1, batch_timeout=None):
+    # change blocking to threading later
     return oslo_messaging.get_batch_notification_listener(
         transport, targets, endpoints, executor='blocking',
         allow_requeue=allow_requeue,

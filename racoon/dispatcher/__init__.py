@@ -7,4 +7,5 @@ class Base(object):
         self.conf = conf
 
 class EventDispatcherBase(Base):
+    # we can define a map of method and database here
         pass
