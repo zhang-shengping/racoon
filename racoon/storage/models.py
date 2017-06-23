@@ -26,7 +26,7 @@ class RacoonBase(object):
 Base = declarative_base(cls=RacoonBase)
 
 class TimeTable(Base):
-    __table_name__ = 'timetable'
+    __tablename__ = 'timetable'
 
     message_id = Column(String(255), index=True,
                         nullable=False, primary_key=True)

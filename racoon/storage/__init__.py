@@ -3,6 +3,16 @@
 
 import tenacity
 
+from oslo_config import cfg
+from oslo_db import options as db_options
+
+OPTS = [
+    cfg.StrOpt('connection',
+               secret=True)
+]
+
+db_options.set_defaults(cfg.CONF)
+
 def get_connection_from_config(conf):
     # provide configuration file
     # 还是从Connection 中取得self._engine_facade.get_engine()
