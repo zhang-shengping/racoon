@@ -46,4 +46,3 @@ if __name__ == "__main__":
     from racoon import service
     service.prepare_service()
     transport = get_transport()
-    print transport

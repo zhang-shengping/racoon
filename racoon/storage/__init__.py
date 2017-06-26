@@ -13,11 +13,6 @@ OPTS = [
 
 db_options.set_defaults(cfg.CONF)
 
-def get_connection_from_config(conf):
-    # provide configuration file
-    # 还是从Connection 中取得self._engine_facade.get_engine()
-    pass
-
 # this class maybe move to some other file later
 class BaseConnection(object):
     def __init__(self, url):
@@ -54,3 +49,28 @@ class BaseConnection(object):
         then update that resource.
         """
         pass
+
+class Resource(object):
+    def __init__(self, data):
+        self.message_id = data.get('message_id')
+        self.user_id = data.get('user_id')
+        self.resource_id = data.get('resource_id')
+        self.start_timestamp = data.get('start_timestamp')
+        self.end_timestamp = data.get('end_timestamp')
+        self.attributes = data.get('attributes')
+
+    def __rper__(self):
+        return ("<SampleFilter("
+                " message_id: %s,"
+                " user_id: %s,"
+                " resource_id: %s,"
+                " start_timestamp: %s,"
+                " end_timestamp: %s,"
+                " attributes: %s)>" %
+                (self.message_id,
+                 self.user_id,
+                 self.resource_id,
+                 self.start_timestamp,
+                 self.end_timestamp,
+                 self.attributes))
+

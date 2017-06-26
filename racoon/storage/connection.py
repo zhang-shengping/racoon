@@ -9,6 +9,11 @@ from oslo_db import api
 from oslo_db.sqlalchemy import session as db_session
 
 from racoon import storage
+from racoon.storage import models
+
+def get_conn_from_config(conf):
+    url = conf.database.connection
+    return Connection(url)
 
 class Connection(storage.BaseConnection):
 
@@ -19,6 +24,28 @@ class Connection(storage.BaseConnection):
     @property
     def engine(self):
         return self._engine_facade.get_engine()
+
+    @property
+    def session(self):
+        return self._engine_facade.get_session()
+
+    def add_resource(self, resource):
+        with self.session.begin():
+             timetable = models.TimeTable(
+                 message_id = resource.message_id,
+                 resource_id = resource.resource_id,
+                 start_timestamp = resource.start_timestamp,
+                 end_timestamp = resource.end_timestamp,
+                 attributes = resource.attributes
+             )
+
+             self.session.add(timetable)
+
+
+
+
+
+
 
 
 
