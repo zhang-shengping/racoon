@@ -56,6 +56,7 @@ class Resource(object):
         self.user_id = data.get('user_id')
         self.project_id = data.get('project_id')
         self.resource_id = data.get('resource_id')
+        # do not forget to change datetime
         self.start_timestamp = data.get('start_timestamp')
         self.end_timestamp = data.get('end_timestamp')
         self.attributes = data.get('attributes')

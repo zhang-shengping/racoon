@@ -31,7 +31,12 @@ class Connection(storage.BaseConnection):
 
     def add_resource(self, resource):
         print resource
-        with self.session.begin():
+        # with session and session commit
+        # both session must the same session
+        # here is the session
+        se = self.session
+
+        with se.begin():
              timetable = models.TimeTable(
                  message_id = resource.message_id,
                  resource_id = resource.resource_id,
@@ -42,9 +47,21 @@ class Connection(storage.BaseConnection):
                  attributes = resource.attributes
              )
 
-             self.session.add(timetable)
+             se.add(timetable)
         print "end **************"
 
+if __name__ == "__main__":
+    conn = Connection("mysql+pymysql://ecollector:password@localhost/ecollector")
+    from racoon.storage import Resource
+    res = {"message_id":'123213',
+           "user_id":'123213',
+           "project_id":'tewt',
+           "attributes":"jasdf"
+           }
+
+    res = Resource(res)
+    print res
+    conn.add_resource(res)
 
 
 
