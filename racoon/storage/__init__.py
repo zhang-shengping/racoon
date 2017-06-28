@@ -54,6 +54,7 @@ class Resource(object):
     def __init__(self, data):
         self.message_id = data.get('message_id')
         self.user_id = data.get('user_id')
+        self.project_id = data.get('project_id')
         self.resource_id = data.get('resource_id')
         self.start_timestamp = data.get('start_timestamp')
         self.end_timestamp = data.get('end_timestamp')
@@ -63,12 +64,14 @@ class Resource(object):
         return ("<SampleFilter("
                 " message_id: %s,"
                 " user_id: %s,"
+                " project_id: %s,"
                 " resource_id: %s,"
                 " start_timestamp: %s,"
                 " end_timestamp: %s,"
                 " attributes: %s)>" %
                 (self.message_id,
                  self.user_id,
+                 self.project_id,
                  self.resource_id,
                  self.start_timestamp,
                  self.end_timestamp,

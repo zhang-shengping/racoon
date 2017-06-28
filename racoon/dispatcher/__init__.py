@@ -16,7 +16,9 @@ class DispatcherBase(object):
 
     def _get_method(self, event_type, resource):
         meth = self.method_map.get(event_type)
-        return getattr(self, meth)
+        if meth:
+            print meth
+            return getattr(self, meth)
 
     def get_resource_id(self, payload, event_type):
         id_name = ID_MAP.get(event_type)

@@ -30,9 +30,7 @@ class Connection(storage.BaseConnection):
         return self._engine_facade.get_session()
 
     def add_resource(self, resource):
-        print "inside************"
         print resource
-        print "**************"
         with self.session.begin():
              timetable = models.TimeTable(
                  message_id = resource.message_id,
@@ -45,6 +43,7 @@ class Connection(storage.BaseConnection):
              )
 
              self.session.add(timetable)
+        print "end **************"
 
 
 
