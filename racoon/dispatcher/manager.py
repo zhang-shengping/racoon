@@ -19,19 +19,6 @@ class DispatchManager(object):
             propagate_map_exceptions=True
         )
 
-    # @property
-    # def manager(self):
-        # print 'in manager'
-
-        # def _check_func(ext):
-            # return ext.name in self.services
-
-        # return dispatch.DispatchExtensionManager(
-            # namespace='racoon.dispatcher',
-            # check_func=_check_func,
-            # invoke_on_load=True
-        # )
-
     def dispatch(self, messages):
 
         def _filter_func(ext, message):
