@@ -2,6 +2,7 @@
 # encoding: utf-8
 
 import datetime
+import json
 
 from oslo_config import cfg
 from oslo_log import log
@@ -44,7 +45,7 @@ class Connection(storage.BaseConnection):
                  project_id = resource.project_id,
                  start_timestamp = resource.start_timestamp,
                  end_timestamp = resource.end_timestamp,
-                 attributes = resource.attributes
+                 attributes = json.dumps(resource.attributes)
              )
 
              se.add(timetable)
