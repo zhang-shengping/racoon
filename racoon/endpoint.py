@@ -3,19 +3,30 @@
 
 import oslo_messaging
 
-from racoon import dispatcher as disp
+from oslo_config import cfg
+from oslo_log import log
+
+from racoon.dispatcher import manager
+
+CONF = cfg.CONF
+
+OPTS = [
+    cfg.ListOpt('services',
+                default=['compute'])
+]
+
+CONF.register_opt(OPTS, 'collector')
 
 class SampleEndpoint(object):
     def __init__(self, manager=None):
-        self.manager = manager
-        # 先加载一个 manager 包含多个模块
-        # 然后从manager 中选取不同对象。
-        self.dispatcher = disp.DispatcherBase()
+        self.services = cfg.CONF.collector.services
+        self.manager = manager.DispatchManager(
+            self.services)
 
     # this used to test
     def info(self, messages):
         try:
-            self.dispatcher.dispatch(messages)
+            self.manager.dispatch(messages)
         except Exception:
             return oslo_messaging.NotificationResult.REQUEUE
         print 'end'
