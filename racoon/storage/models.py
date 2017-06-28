@@ -29,10 +29,11 @@ class TimeTable(Base):
     __tablename__ = 'timetable'
 
     message_id = Column(String(255), index=True,
-                        nullable=False, primary_key=True)
-    resource_id = Column(String(255), index=True, nullable=False)
-    start_timestamp= Column(DateTime(255), index=True,
-                            nullable=False)
+                        primary_key=True)
+    resource_id = Column(String(255), index=True)
+    user_id = Column(String(255), index=True)
+    project_id = Column(String(255), index=True)
+    start_timestamp= Column(DateTime(255), index=True)
     end_timestamp= Column(DateTime(), index=True)
     attributes = Column(String(255))
 

@@ -23,16 +23,17 @@ class DispatcherBase(object):
         resource_id = payload.get(id_name)
         return resource_id
 
-     def _get_attributes(self, payload):
+    def _get_attributes(self, payload):
          pass
 
     def init_resource(self, message):
+        print 'original'
         pass
 
-    def dispatch(self, messages):
-        for m in messages:
-            res = self.init_resource(m)
-            meth = self._get_method(m.get('event_type'),
+    def dispatch(self, message):
+        res = self.init_resource(message)
+        meth = self._get_method(message.get('event_type'),
                                    res)
-            if meth:
-                meth(res)
+            #print meth
+        if meth:
+            meth(res, **message)

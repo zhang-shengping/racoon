@@ -6,8 +6,8 @@ from racoon.storage import Resource
 
 METHOD_MAP = {
     'compute.instance.create.end':'create',
-    'compute.instance.delete.end':'delete',
-    'compute.instance.resize.confirm.end':'resize',
+    #'compute.instance.delete.end':'delete',
+    #'compute.instance.resize.confirm.end':'resize',
 }
 
 ATTR_MAP = {}
@@ -20,25 +20,31 @@ class ComDispatcher(DispatcherBase):
         self.attr_map =  ATTR_MAP
 
     def init_resource(self, message):
+        # need do something when something call this
+        if message.get('event_type') not in self.method_map:
+            return
+
         payload = message.get('payload')
         metadata = message.get('metadata')
-
         res = {}
-        if payload and metadata and event_type:
-            res['message_id'] = payload.get('message_id')
-            res['user_id'] = payload.get('user_id')
-            res['project_id'] = payload.get('project_id')
-            res['resource_id'] = payload.get('instance_id')
-            res['start_timestamp'] = metadata.get('timestamp')
-            res['attributes'] = self._get_attributes(payload)
 
+        res['user_id'] = payload.get('user_id')
+        res['project_id'] = payload.get('tenant_id')
+        res['resource_id'] = payload.get('instance_id')
+        res['message_id'] = metadata.get('message_id')
+        res['start_timestamp'] = metadata.get('timestamp')
+        res['attributes'] = self._get_attributes(payload)
+
+        # insert some log here
         return Resource(res)
 
     def _get_attributes(self, payload):
-        pass
+        attrs = {}
+        attrs['instance_flavor_id'] = payload.get('instance_flavor_id')
+        return attrs
 
     def create(self, resource, *args, **kwargs):
-        pass
+        self.conn.add_resource(resource)
 
     def delete(self, resource, *args, **kwargs):
         pass
@@ -47,4 +53,4 @@ class ComDispatcher(DispatcherBase):
         pass
 
     def test(self):
-        print 'hello'
+        pass

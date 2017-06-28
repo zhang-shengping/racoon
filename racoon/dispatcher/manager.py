@@ -28,7 +28,6 @@ class DispatchManager(object):
 
         # # when success change to lambda
         def process_func(ext, message):
-            #print ext
             ext.obj.dispatch(message)
 
         for m in messages:
