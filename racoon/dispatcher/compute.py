@@ -5,3 +5,7 @@
 class ComDispatcher(object):
     def test(self):
         print 'hello'
+
+
+    def dispatch(self, message):
+        print message

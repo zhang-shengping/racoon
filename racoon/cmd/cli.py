@@ -3,6 +3,7 @@
 
 import cotyledon
 from oslo_config import cfg
+from oslo_log import log
 
 from racoon import collector
 from racoon import service
