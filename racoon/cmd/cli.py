@@ -9,6 +9,8 @@ from racoon import collector
 from racoon import service
 
 CONF = cfg.CONF
+LOG = log.getLogger(__name__)
+
 
 def main():
     service.prepare_service()

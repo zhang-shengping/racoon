@@ -3,11 +3,10 @@
 
 from oslo_config import cfg
 
+from racoon import service
 from racoon.storage.connection import Connection
 from racoon.storage import models
-from racoon import service
 
-from sqlalchemy import create_engine
 
 # this is a global variable, always get the same CONF
 # I can get all variable, as long as I register it
@@ -16,6 +15,7 @@ from sqlalchemy import create_engine
 # The values in configuration filea can be assigned
 # to CONF, as long as I call cfg.CONF(project=)
 CONF = cfg.CONF
+
 
 def create_db():
     service.prepare_service()
@@ -27,5 +27,3 @@ def create_db():
 
 if __name__ == '__main__':
     create_db()
-
-

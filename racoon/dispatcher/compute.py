@@ -5,19 +5,20 @@ from racoon.dispatcher import DispatcherBase
 from racoon.storage import Resource
 
 METHOD_MAP = {
-    'compute.instance.create.end':'create',
-    #'compute.instance.delete.end':'delete',
-    #'compute.instance.resize.confirm.end':'resize',
+    'compute.instance.create.end': 'create',
+    # 'compute.instance.delete.end': 'delete',
+    # 'compute.instance.resize.confirm.end': 'resize',
 }
 
 ATTR_MAP = {}
+
 
 class ComDispatcher(DispatcherBase):
     def __init__(self):
         super(ComDispatcher, self).__init__()
 
         self.method_map = METHOD_MAP
-        self.attr_map =  ATTR_MAP
+        self.attr_map = ATTR_MAP
 
     def init_resource(self, message):
 

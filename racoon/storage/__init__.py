@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-import tenacity
+# maybe need try mutiple times
+# import tenacity
 
 from oslo_config import cfg
 from oslo_db import options as db_options
@@ -13,7 +14,7 @@ OPTS = [
 
 db_options.set_defaults(cfg.CONF)
 
-# this class maybe move to some other file later
+
 class BaseConnection(object):
     def __init__(self, url):
         pass
@@ -22,10 +23,12 @@ class BaseConnection(object):
         pass
 
     def add_resources(self, resources):
-        """
-        accept a list of resources,
+
+        """accept a list of resources,
+
         and persist them
         """
+
         pass
 
     def add_resource(self, resource):
@@ -38,17 +41,22 @@ class BaseConnection(object):
         pass
 
     def clear_expired_resources(self):
+
         """
         check the end_timestamp if expired
         """
+
         pass
 
     def renew_resource(self, resource):
-        """
-        check the resource which it has no end_timestamp,
+
+        """check the resource which it has no end_timestamp,
+
         then update that resource.
         """
+
         pass
+
 
 class Resource(object):
     def __init__(self, data):
@@ -77,4 +85,3 @@ class Resource(object):
                  self.start_timestamp,
                  self.end_timestamp,
                  self.attributes))
-

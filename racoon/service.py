@@ -13,6 +13,7 @@ COLL_WORKER = cfg.IntOpt('worker',
 
 cfg.CONF.register_opt(COLL_WORKER, 'collector')
 
+
 def prepare_service():
     log.register_options(cfg.CONF)
     log_level = cfg.CONF.default_log_levels
@@ -25,5 +26,3 @@ def prepare_service():
     log.setup(cfg.CONF, 'raccon')
     messaging.setup()
     LOG.info('initiated services')
-
-

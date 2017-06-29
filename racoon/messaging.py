@@ -7,8 +7,10 @@ import oslo_messaging
 DEFAULT_URL = "__default__"
 TRANSPORTS = {}
 
+
 def setup():
     oslo_messaging.set_transport_defaults('racoon')
+
 
 def get_transport(url=None, cache=True):
     """Initialise the oslo_messaging layer."""
@@ -26,6 +28,7 @@ def get_transport(url=None, cache=True):
                 TRANSPORTS[cache_key] = transport
     return transport
 
+
 def get_event_listener(transport, targets, endpoints,
                        allow_requeue=False,
                        batch_size=1, batch_timeout=None):
@@ -35,11 +38,11 @@ def get_event_listener(transport, targets, endpoints,
         allow_requeue=allow_requeue,
         batch_size=batch_size, batch_timeout=batch_timeout)
 
+
 def get_targets(topics=['event']):
     targets = [oslo_messaging.Target(topic=_topic)
                for _topic in topics]
     return targets
-
 
 
 if __name__ == "__main__":

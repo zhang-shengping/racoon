@@ -4,18 +4,15 @@
 import cotyledon
 from oslo_config import cfg
 from oslo_log import log
-import oslo_messaging
 
-from racoon import dispatcher
 from racoon import endpoint
 from racoon import messaging
 
-import time
-
 LOG = log.getLogger(__name__)
 
+
 class CollectorService(cotyledon.Service):
-    """Listener to notification service"""
+
     def __init__(self, worker_id):
         super(CollectorService, self).__init__(worker_id)
         self.event_listener = None
@@ -33,9 +30,11 @@ class CollectorService(cotyledon.Service):
             self.event_listener.start()
 
     def terminate(self):
+
         """
         kill listener
         """
+
         if self.event_listener:
             self.event_listener.stop()
             self.event_listener.wait()

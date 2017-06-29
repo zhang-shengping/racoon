@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-import stevedore
-
-from stevedore.dispatch import DispatchExtensionManager
 from oslo_log import log
+from stevedore.dispatch import DispatchExtensionManager
 
 LOG = log.getLogger(__name__)
+
 
 class DispatchManager(object):
 
@@ -36,8 +35,6 @@ class DispatchManager(object):
             try:
                 self.manager.map(_filter_func,
                                  process_func, m)
-            except:
+            except Exception:
                 LOG.error("can not dipatch message %s", m)
                 raise
-
-
