@@ -65,8 +65,8 @@ class Resource(object):
         self.project_id = data.get('project_id')
         self.resource_id = data.get('resource_id')
         # do not forget to change datetime
-        self.start_timestamp = data.get('start_timestamp')
-        self.end_timestamp = data.get('end_timestamp')
+        # I did not change yet
+        self.timestamp = data.get('timestamp')
         self.attributes = data.get('attributes')
 
     def __str__(self):
@@ -75,13 +75,11 @@ class Resource(object):
                 " user_id: %s,"
                 " project_id: %s,"
                 " resource_id: %s,"
-                " start_timestamp: %s,"
-                " end_timestamp: %s,"
+                " timestamp: %s,"
                 " attributes: %s)>" %
                 (self.message_id,
                  self.user_id,
                  self.project_id,
                  self.resource_id,
-                 self.start_timestamp,
-                 self.end_timestamp,
+                 self.timestamp,
                  self.attributes))

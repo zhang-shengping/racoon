@@ -1,16 +1,19 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+from oslo_log import log
 from racoon.dispatcher import DispatcherBase
 from racoon.storage import Resource
 
 METHOD_MAP = {
     'compute.instance.create.end': 'create',
-    # 'compute.instance.delete.end': 'delete',
+    'compute.instance.delete.end': 'delete',
     # 'compute.instance.resize.confirm.end': 'resize',
 }
 
 ATTR_MAP = {}
+
+LOG = log.getLogger(__name__)
 
 
 class ComDispatcher(DispatcherBase):
@@ -30,7 +33,7 @@ class ComDispatcher(DispatcherBase):
         res['project_id'] = payload.get('tenant_id')
         res['resource_id'] = payload.get('instance_id')
         res['message_id'] = metadata.get('message_id')
-        res['start_timestamp'] = metadata.get('timestamp')
+        res['timestamp'] = metadata.get('timestamp')
         res['attributes'] = self._get_attributes(payload)
 
         # insert some log here
@@ -42,10 +45,12 @@ class ComDispatcher(DispatcherBase):
         return attrs
 
     def create(self, resource, *args, **kwargs):
-        self.conn.add_resource(resource)
+        LOG.info('start a resource %s', resource)
+        self.conn.resource_start(resource)
 
     def delete(self, resource, *args, **kwargs):
-        pass
+        LOG.info('end a resource %s', resource)
+        self.conn.resource_end(resource)
 
     def resize(self, resource, *args, **kwargs):
         pass

@@ -32,7 +32,7 @@ class Connection(storage.BaseConnection):
     def session(self):
         return self._engine_facade.get_session()
 
-    def add_resource(self, resource):
+    def resource_start(self, resource):
 
         # with session and session commit
         # both session must the same session
@@ -48,14 +48,27 @@ class Connection(storage.BaseConnection):
                 resource_id=resource.resource_id,
                 user_id=resource.user_id,
                 project_id=resource.project_id,
-                start_timestamp=resource.start_timestamp,
-                end_timestamp=resource.end_timestamp,
+                start_timestamp=resource.timestamp,
                 attributes=json.dumps(resource.attributes))
 
             se.add(timetable)
 
         LOG.info('resource %s is persisted',
                  resource)
+
+    def resource_end(self, resource):
+        # TRY to find a resource in db
+        # select resource_id and end_timestamp is null
+        # then add a end_timestamp
+
+        se = self.session
+        try:
+            pass
+        except Exception:
+            LOG.inf('can not found resource %s',
+                    resource)
+
+        pass
 
 if __name__ == "__main__":
     conn = Connection(
