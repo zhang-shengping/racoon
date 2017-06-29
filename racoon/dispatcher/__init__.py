@@ -2,9 +2,12 @@
 # encoding: utf-8
 
 from oslo_config import cfg
+from oslo_log import log
 
 from racoon.storage import Resource
 from racoon.storage import connection as conn
+
+LOG = log.getLogger(__name__)
 
 class DispatcherBase(object):
     # we can define a map of method and database here
@@ -17,7 +20,8 @@ class DispatcherBase(object):
     def _get_method(self, event_type, resource):
         meth = self.method_map.get(event_type)
         if meth:
-            print meth
+            LOG.info('get method <%s> for event <%s>',
+                     meth, event_type)
             return getattr(self, meth)
 
     def get_resource_id(self, payload, event_type):
@@ -29,13 +33,16 @@ class DispatcherBase(object):
          pass
 
     def init_resource(self, message):
-        print 'original'
         pass
+
+    def vaild_message(self, message):
+        return message.get('event_type') in self.method_map
 
     def dispatch(self, message):
         res = self.init_resource(message)
+        LOG.info('get resource %s', res)
+
         meth = self._get_method(message.get('event_type'),
                                    res)
-            #print meth
         if meth:
             meth(res, **message)

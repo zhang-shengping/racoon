@@ -18,7 +18,6 @@ class CollectorService(cotyledon.Service):
     """Listener to notification service"""
     def __init__(self, worker_id):
         super(CollectorService, self).__init__(worker_id)
-        #dispatcher_managers = dispatcher.()
         self.event_listener = None
 
     def run(self):
@@ -30,6 +29,7 @@ class CollectorService(cotyledon.Service):
             self.event_listener = messaging.get_event_listener(
                 transport, event_targets, [endpoint.SampleEndpoint()]
             )
+            LOG.info('start event listener')
             self.event_listener.start()
 
     def terminate(self):

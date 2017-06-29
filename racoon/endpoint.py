@@ -20,14 +20,27 @@ CONF.register_opts(OPTS, group='collector')
 class SampleEndpoint(object):
     def __init__(self):
         self.services = cfg.CONF.collector.services
+        LOG.info('collect services: %s', self.services)
         self.manager = manager.DispatchManager(
             self.services)
 
     # this used to test
     def info(self, messages):
         try:
+            # if the message is not the right type
+            # it wont requeue and raise Exception
+            # only if the message is right type
+            # and something wrong it raise exception
             self.manager.dispatch(messages)
-        except Exception:
+        except Exception as err:
+            for m in messages:
+                LOG.info('can not dispatch event %s',
+                         m.get('event_type'))
+                # cant see what exception
+                # even do this
+                # raise err
+
+            # requeue the right type event
             return oslo_messaging.NotificationResult.REQUEUE
         #add exception requeue
 

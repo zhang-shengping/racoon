@@ -12,6 +12,8 @@ from oslo_db.sqlalchemy import session as db_session
 from racoon import storage
 from racoon.storage import models
 
+LOG = log.getLogger(__name__)
+
 def get_conn_from_config(conf):
     url = conf.database.connection
     return Connection(url)
@@ -31,10 +33,11 @@ class Connection(storage.BaseConnection):
         return self._engine_facade.get_session()
 
     def add_resource(self, resource):
-        print resource
+
         # with session and session commit
         # both session must the same session
         # here is the session
+        raise Exception
         se = self.session
 
         with se.begin():
@@ -49,7 +52,9 @@ class Connection(storage.BaseConnection):
              )
 
              se.add(timetable)
-        print "end **************"
+
+        LOG.info('resource %s is persisted',
+                 resource)
 
 if __name__ == "__main__":
     conn = Connection("mysql+pymysql://ecollector:password@localhost/ecollector")
@@ -57,11 +62,9 @@ if __name__ == "__main__":
     res = {"message_id":'123213',
            "user_id":'123213',
            "project_id":'tewt',
-           "attributes":"jasdf"
-           }
+           "attributes":"jasdf"}
 
     res = Resource(res)
-    print res
     conn.add_resource(res)
 
 

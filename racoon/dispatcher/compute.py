@@ -20,9 +20,6 @@ class ComDispatcher(DispatcherBase):
         self.attr_map =  ATTR_MAP
 
     def init_resource(self, message):
-        # need do something when something call this
-        if message.get('event_type') not in self.method_map:
-            return
 
         payload = message.get('payload')
         metadata = message.get('metadata')

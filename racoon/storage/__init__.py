@@ -61,7 +61,7 @@ class Resource(object):
         self.end_timestamp = data.get('end_timestamp')
         self.attributes = data.get('attributes')
 
-    def __rper__(self):
+    def __str__(self):
         return ("<SampleFilter("
                 " message_id: %s,"
                 " user_id: %s,"
