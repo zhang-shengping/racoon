@@ -53,7 +53,9 @@ class ComDispatcher(DispatcherBase):
         self.conn.resource_end(resource)
 
     def resize(self, resource, *args, **kwargs):
-        pass
+        LOG.info('resize a resource %s', resource)
+        self.conn.resource_resize(resource)
+
 
     def test(self):
         pass

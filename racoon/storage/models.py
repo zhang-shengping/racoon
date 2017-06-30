@@ -18,6 +18,7 @@ class RacoonBase(object):
         setattr(self, key, value)
 
     def __getitem__(self, key):
+        print key
         getattr(self, key)
 
     def update(self, values):

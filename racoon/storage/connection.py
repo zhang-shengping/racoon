@@ -62,13 +62,37 @@ class Connection(storage.BaseConnection):
         # then add a end_timestamp
 
         se = self.session
-        try:
-            pass
-        except Exception:
-            LOG.inf('can not found resource %s',
-                    resource)
+        _id = resource.resource_id
+        timestamp = resource.timestamp
+
+        with se.begin():
+            try:
+                query = se.query(
+                    models.TimeTable).filter(
+                        models.TimeTable.resource_id=_id,
+                        models.TimeTable.end_timestamp=None
+                    ).one()
+
+                query.update(
+                    {models.TimeTable.end_timestamp: timestamp})
+
+            except Exception:
+                LOG.inf('can set end_time to resource %s',
+                        resource)
+
+        LOG.info('resource %s sets end_timestamp <%s>',
+                 resource, timestamp)
+
+    def resource_resize(self, resource):
+        # end preview resource
+        # build a new resource
+
+        se = self.session
+        _id = resource.resource_id
+        timestamp = resource.timestamp
 
         pass
+
 
 if __name__ == "__main__":
     conn = Connection(
@@ -98,14 +122,23 @@ if __name__ == "__main__":
                 # models.TimeTable.start_timestamp):
         # print r.start_timestamp
 
-    from sqlalchemy import func
-    a =  session.query(func.count(models.TimeTable.resource_id)).scalar()
-    print a
+    # from sqlalchemy import func
+    # a =  session.query(func.count(models.TimeTable.resource_id)).scalar()
+    # print a
 
-    for i in session.query(func.count(models.TimeTable.user_id)):
-        print i
+    # for i in session.query(func.count(models.TimeTable.user_id).label('test'),
+                           # func.count(models.TimeTable.start_timestamp)):
+        # print i.keys()
+        # print i.test
 
+    # for i in session.query(
+            # models.TimeTable).filter(models.TimeTable.end_timestamp == None):
+        # print i
 
+    re = session.query(
+        models.TimeTable).filter_by(resource_id='22754304-6434-480d-9c6c-4dca2309ff4b').one()
+
+    print re
     # res = {"message_id": '123213',
            # "user_id": '123213',
            # "project_id": 'tewt',
