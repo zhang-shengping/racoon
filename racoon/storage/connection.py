@@ -74,10 +74,43 @@ if __name__ == "__main__":
     conn = Connection(
         "mysql+pymysql://ecollector:password@localhost/ecollector")
     from racoon.storage import Resource
-    res = {"message_id": '123213',
-           "user_id": '123213',
-           "project_id": 'tewt',
-           "attributes": 'jasdf'}
+    session = conn.session
+    # query all
+    # result_set = session.query(models.TimeTable).all()
+    # for re in session.query(models.TimeTable):
+        # print re.resource_id
 
-    res = Resource(res)
-    conn.add_resource(res)
+    # select the first one
+    # res = session.query(models.TimeTable).first()
+    # print res.resource_id
+
+    # res = session.query(models.TimeTable).one()
+    # print res.resource_id
+
+    #res = session.query(models.TimeTable).scalar()
+    #print res.resource_id
+
+    # print(session.query(models.TimeTable.resource_id).first())
+    # print(session.query(models.TimeTable.message_id).first())
+
+    # for r in session.query(
+            # models.TimeTable).order_by(
+                # models.TimeTable.start_timestamp):
+        # print r.start_timestamp
+
+    from sqlalchemy import func
+    a =  session.query(func.count(models.TimeTable.resource_id)).scalar()
+    print a
+
+    for i in session.query(func.count(models.TimeTable.user_id)):
+        print i
+
+
+    # res = {"message_id": '123213',
+           # "user_id": '123213',
+           # "project_id": 'tewt',
+           # "attributes": 'jasdf'}
+
+    # res = Resource(res)
+    # conn.add_resource(res)
+
