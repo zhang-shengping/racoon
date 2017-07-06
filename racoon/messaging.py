@@ -2,11 +2,13 @@
 # encoding: utf-8
 
 from oslo_config import cfg
+from oslo_log import log
 import oslo_messaging
 
 DEFAULT_URL = "__default__"
 TRANSPORTS = {}
 
+LOG = log.getLogger(__name__)
 
 def setup():
     oslo_messaging.set_transport_defaults('racoon')
@@ -34,7 +36,8 @@ def get_event_listener(transport, targets, endpoints,
                        batch_size=1, batch_timeout=None):
     # change blocking to threading later
     return oslo_messaging.get_batch_notification_listener(
-        transport, targets, endpoints, executor='blocking',
+        transport, targets, endpoints, executor='threading',
+        #transport, targets, endpoints, executor='blocking',
         allow_requeue=allow_requeue,
         batch_size=batch_size, batch_timeout=batch_timeout)
 

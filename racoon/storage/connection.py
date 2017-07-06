@@ -67,31 +67,60 @@ class Connection(storage.BaseConnection):
 
         with se.begin():
             try:
+                # TODO: is there any way to make sure one record
+                # and update in one query
                 query = se.query(
                     models.TimeTable).filter(
-                        models.TimeTable.resource_id=_id,
-                        models.TimeTable.end_timestamp=None
-                    ).one()
-
-                query.update(
-                    {models.TimeTable.end_timestamp: timestamp})
+                        models.TimeTable.resource_id==_id,
+                        models.TimeTable.end_timestamp==None
+                    ).update(
+                        {models.TimeTable.end_timestamp: timestamp})
 
             except Exception:
-                LOG.inf('can set end_time to resource %s',
+                LOG.info('can set end_time to resource %s',
                         resource)
+                raise
 
         LOG.info('resource %s sets end_timestamp <%s>',
                  resource, timestamp)
 
     def resource_resize(self, resource):
-        # end preview resource
-        # build a new resource
+        # update and create should be in one transcation
+        # udpate:
+        # find the resource with the same id but without end_timstamp
+        # then update the end_timestamp with timestamp
+
+        # create:
+        # finally create a new record start_timestamp == timestamp
 
         se = self.session
         _id = resource.resource_id
         timestamp = resource.timestamp
 
-        pass
+        with se.begin():
+            try:
+                query = se.query(
+                    models.TimeTable).filter(
+                        models.TimeTable.resource_id==_id,
+                        models.TimeTable.end_timestamp==None
+                    )
+                query.update({models.TimeTable.end_timestamp: timestamp})
+
+                timetable = models.TimeTable(
+                    message_id=resource.message_id,
+                    resource_id=_id,
+                    user_id=resource.user_id,
+                    project_id=resource.project_id,
+                    start_timestamp=timestamp,
+                    attributes=json.dumps(resource.attributes))
+
+                se.add(timetable)
+            except Exception:
+                LOG.error('resource %s resize is not set', resource)
+                raise
+
+        LOG.info('record resource %s resize end_timestamp <%s>',
+                 resource, timestamp)
 
 
 if __name__ == "__main__":
@@ -132,13 +161,18 @@ if __name__ == "__main__":
         # print i.test
 
     # for i in session.query(
-            # models.TimeTable).filter(models.TimeTable.end_timestamp == None):
+            # models.TimeTable).filter(models.TimeTable.end_timestamp != None):
         # print i
 
-    re = session.query(
-        models.TimeTable).filter_by(resource_id='22754304-6434-480d-9c6c-4dca2309ff4b').one()
+    re = session.query(models.TimeTable).filter(
+            models.TimeTable.resource_id=="26434-480d-9c6c-4dca2309ff4b",
+    ).update({models.TimeTable.user_id: '123123123'})
 
-    print re
+
+
+    # re.update({models.TimeTable.end_timestamp: '2017-06-28 10:10:57'})
+    # print re
+
     # res = {"message_id": '123213',
            # "user_id": '123213',
            # "project_id": 'tewt',

@@ -36,5 +36,5 @@ class DispatchManager(object):
                 self.manager.map(_filter_func,
                                  process_func, m)
             except Exception:
-                LOG.error("can not dipatch message %s", m)
+                LOG.debug("can not dipatch message %s", m)
                 raise

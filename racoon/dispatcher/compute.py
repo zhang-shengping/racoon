@@ -8,7 +8,7 @@ from racoon.storage import Resource
 METHOD_MAP = {
     'compute.instance.create.end': 'create',
     'compute.instance.delete.end': 'delete',
-    # 'compute.instance.resize.confirm.end': 'resize',
+    'compute.instance.resize.confirm.end': 'resize',
 }
 
 ATTR_MAP = {}
