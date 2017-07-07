@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+import threading
+
 import cotyledon
 from oslo_config import cfg
 from oslo_log import log
