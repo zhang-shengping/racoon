@@ -4,9 +4,13 @@
 import cotyledon
 import threading
 
+from racoon.storage import connection
+
 from oslo_config import cfg
 from oslo_log import log
 from oslo_utils import timeutils
+
+CONF = cfg.CONF
 
 LOG = log.getLogger(__name__)
 
@@ -31,7 +35,10 @@ class JanitorService(cotyledon.Service):
         self.__shutdown_done.set()
 
     def _run_job(self):
-        print 'hello'
+        LOG.info('janitor clean resources')
+        con = connection.get_conn_from_config(CONF)
+        # get start and end time
+        con.del_resource_by_duration(1)
 
     def terminate(self):
         self.__shutdown.set()

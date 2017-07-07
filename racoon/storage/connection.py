@@ -122,6 +122,11 @@ class Connection(storage.BaseConnection):
         LOG.info('record resource %s resize end_timestamp <%s>',
                  resource, timestamp)
 
+    def del_resource_by_duration(self, start, end):
+        # delete the resource between start and end
+        print 'delete resource'
+        pass
+
 
 if __name__ == "__main__":
     conn = Connection(
