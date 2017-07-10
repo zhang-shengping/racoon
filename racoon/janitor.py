@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+import datetime
 import cotyledon
 import threading
 
@@ -38,7 +39,16 @@ class JanitorService(cotyledon.Service):
         LOG.info('janitor clean resources')
         con = connection.get_conn_from_config(CONF)
         # get start and end time
-        con.del_resource_by_duration(1)
+        end_timestamp = self._get_past()
+        con.del_resource_by_timestamp(end_timestamp)
+
+    def _get_past(self):
+        start = datetime.datetime.utcnow()
+        end = start - datetime.timedelta(
+            seconds=self.delay)
+        # end = end.strftime('%Y-%m-%dT%H:%M:%SZ')
+        end = end.strftime('%Y-%m-%d %H:%M:%S')
+        return end
 
     def terminate(self):
         self.__shutdown.set()

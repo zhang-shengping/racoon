@@ -122,10 +122,23 @@ class Connection(storage.BaseConnection):
         LOG.info('record resource %s resize end_timestamp <%s>',
                  resource, timestamp)
 
-    def del_resource_by_duration(self, start, end):
-        # delete the resource between start and end
-        print 'delete resource'
-        pass
+    def del_resource_by_timestamp(self, timestamp):
+        se = self.session
+
+        with se.begin():
+            try:
+                query = se.query(
+                    models.TimeTable).filter(
+                        models.TimeTable.end_timestamp<=timestamp,
+                        models.TimeTable.end_timestamp!=None
+                    )
+                query.delete()
+            except Exception:
+                LOG.error('can not delete resources by end_timestamp %s',
+                          timestamp)
+                raise
+
+        LOG.info('delete resource by end_timestamp %s', timestamp)
 
 
 if __name__ == "__main__":
@@ -169,15 +182,29 @@ if __name__ == "__main__":
             # models.TimeTable).filter(models.TimeTable.end_timestamp != None):
         # print i
 
-    re = session.query(models.TimeTable).filter(
-            models.TimeTable.resource_id=="26434-480d-9c6c-4dca2309ff4b",
-    ).update({models.TimeTable.user_id: '123123123'})
+    # re = session.query(models.TimeTable).filter(
+            # models.TimeTable.resource_id=="26434-480d-9c6c-4dca2309ff4b",
+    # ).update({models.TimeTable.user_id: '123123123'})
 
 
 
     # re.update({models.TimeTable.end_timestamp: '2017-06-28 10:10:57'})
     # print re
 
+    import datetime
+    # time = datetime.datetime.utcnow() - datetime.timedelta(days=10)
+    # time = time.strftime('%Y-%m-%d %H:%M:%S')
+    time ='2018-07-10T06:39:16'
+    LOCAL_FORMAT = '%Y-%m-%dT%H:%M:%S'
+    time = datetime.datetime.strptime(time, LOCAL_FORMAT)
+
+    re = session.query(models.TimeTable).filter(
+        models.TimeTable.end_timestamp <= time
+    )
+    a = re.all()
+    for i in a:
+        print a
+        print i.end_timestamp
     # res = {"message_id": '123213',
            # "user_id": '123213',
            # "project_id": 'tewt',
