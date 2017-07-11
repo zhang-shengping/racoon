@@ -9,6 +9,7 @@ from oslo_log import log
 
 from racoon import storage
 from racoon.storage import models
+from sqlalchemy import or_
 
 LOG = log.getLogger(__name__)
 
@@ -140,6 +141,24 @@ class Connection(storage.BaseConnection):
 
         LOG.info('delete resource by end_timestamp %s', timestamp)
 
+    def get_resource_by_timestamp(self, timestamp):
+        se = self.session
+
+        with se.begin():
+            try:
+                query = se.query(
+                    models.TimeTable).filter(or_(
+                        models.TimeTable.end_timestamp==None,
+                        models.TimeTable.end_timestamp>=timestamp)
+                    )
+                resources = query.all()
+                LOG.info('get resources by timestamp %s', timestamp)
+
+                return resources
+
+            except Exception:
+                LOG.error('can not get resources by timestamp %s',
+                          timestamp)
 
 if __name__ == "__main__":
     conn = Connection(

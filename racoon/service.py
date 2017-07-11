@@ -16,6 +16,9 @@ OPTS = [
 
     cfg.IntOpt('janitor_delay',
                default = 7200),
+
+    cfg.IntOpt('searcher_delay',
+               default = 3600)
 ]
 
 CONF.register_opts(OPTS, 'collector')
