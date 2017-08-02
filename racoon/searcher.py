@@ -47,7 +47,8 @@ class SearcherService(cotyledon.Service):
         end_timestamp = self._get_past()
         resources = con.get_resource_by_timestamp(end_timestamp)
         for r in resources:
-            print r.end_timestamp
+            print r.resource_id
+        print len(resources)
 
     def _get_past(self):
         start = datetime.datetime.utcnow()

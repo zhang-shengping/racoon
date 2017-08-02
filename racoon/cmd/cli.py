@@ -10,6 +10,7 @@ from oslo_log import log
 from racoon import collector
 from racoon import service
 from racoon import janitor
+from racoon import searcher
 
 CONF = cfg.CONF
 LOG = log.getLogger(__name__)
@@ -20,6 +21,7 @@ def main():
     sm = cotyledon.ServiceManager()
     sm.add(collector.CollectorService, workers=CONF.collector.worker)
     sm.add(janitor.JanitorService, workers=1)
+    sm.add(searcher.SearcherService, workers=1)
     sm.run()
 
 
