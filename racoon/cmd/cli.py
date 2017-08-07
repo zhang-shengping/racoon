@@ -20,8 +20,8 @@ def main():
     service.prepare_service()
     sm = cotyledon.ServiceManager()
     sm.add(collector.CollectorService, workers=CONF.collector.worker)
-    sm.add(janitor.JanitorService, workers=1)
-    sm.add(searcher.SearcherService, workers=1)
+    #sm.add(janitor.JanitorService, workers=1)
+    #sm.add(searcher.SearcherService, workers=1)
     sm.run()
 
 

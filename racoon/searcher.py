@@ -33,11 +33,12 @@ class SearcherService(cotyledon.Service):
     def run(self):
         while not self.__shutdown.is_set():
             with timeutils.StopWatch() as timer:
-                # run job needs time
-                self._run_job()
                 # therefore self.delay - time used by run job
                 self.__shutdown.wait(max(0, self.delay -
                                          timer.elapsed()))
+                # wait a while then collect
+                self._run_job()
+
         self.__shutdown_done.set()
 
     def _run_job(self):

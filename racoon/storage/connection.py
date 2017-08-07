@@ -9,7 +9,7 @@ from oslo_log import log
 
 from racoon import storage
 from racoon.storage import models
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
 
 LOG = log.getLogger(__name__)
 
@@ -159,10 +159,34 @@ class Connection(storage.BaseConnection):
             except Exception:
                 LOG.error('can not get resources by timestamp %s',
                           timestamp)
+                raise
+
+    def get_resource_by_duration(self, start_timestamp, end_timestamp):
+        se = self.session
+
+        with se.begin():
+            try:
+                query = se.query(
+                    models.TimeTable).filter(and_(
+                        models.TimeTable.start_timestamp>=start_timestamp,
+                        models.TimeTable.start_timestamp<end_timestamp)
+                    ).filter(or_(
+                        models.TimeTable.end_timestamp<=end_timestamp,
+                        models.TimeTable.end_timestamp==None)
+                    )
+                resources = query.all()
+                LOG.info('get resources by duration %s - %s',
+                         start_timestamp, end_timestamp)
+
+                return resources
+
+            except Exception:
+                LOG.error('can not get resources')
+                raise
 
 if __name__ == "__main__":
     conn = Connection(
-        "mysql+pymysql://ecollector:password@localhost/ecollector")
+        "mysql+pymysql://racoon:password@localhost/racoon")
     from racoon.storage import Resource
     session = conn.session
     # query all
@@ -217,9 +241,13 @@ if __name__ == "__main__":
     LOCAL_FORMAT = '%Y-%m-%dT%H:%M:%S'
     time = datetime.datetime.strptime(time, LOCAL_FORMAT)
 
-    re = session.query(models.TimeTable).filter(
-        models.TimeTable.end_timestamp <= time
-    )
+    re = session.query(models.TimeTable).filter(and_(
+        models.TimeTable.user_id == None,
+        models.TimeTable.resource_id == None,
+    )).filter(and_(models.TimeTable.end_timestamp == None,
+                  models.TimeTable.project_id != None)
+             )
+
     a = re.all()
     for i in a:
         print a

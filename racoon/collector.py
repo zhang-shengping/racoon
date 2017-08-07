@@ -24,8 +24,8 @@ class CollectorService(cotyledon.Service):
                 cfg.CONF.oslo_messaging_notifications.topics
             )
             self.event_listener = messaging.get_event_listener(
-                transport, event_targets,allow_requeue=True, 
-                [endpoint.SampleEndpoint()]
+                transport, event_targets,[endpoint.SampleEndpoint()],
+                allow_requeue=True
             )
             LOG.info('start event listener')
             self.event_listener.start()

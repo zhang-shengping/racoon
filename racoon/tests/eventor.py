@@ -11,6 +11,6 @@ transport = oslo_messaging.get_notification_transport(
 notifier = oslo_messaging.Notifier(transport,
     driver='messagingv2', topics=['test2'])
 
-notifier.info({},'test',{})
+notifier.info({},'compute.instance.create.end',{})
 
-print notifier
+print 'finished sending data'
